@@ -6,7 +6,6 @@ export function PagesProvider({ children }) {
   const [charactersPageNumber, setCharactersPageNumber] = useState(1);
   const [episodesPageNumber, setEpisodesPageNumber] = useState(1);
   const [locationsPageNumber, setLocationsPageNumber] = useState(1);
-  const [type, setType] = useState("");
 
   const value = useMemo(
     () => ({

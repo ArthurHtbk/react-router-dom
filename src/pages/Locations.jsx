@@ -16,7 +16,7 @@ function Locations() {
           <Card key={element.id} data={element} type="location" />
         ))}
       </div>
-      <Pages info={info} type="location" />
+      <Pages info={info} />
     </>
   );
 }

@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { usePageNumber } from "../contexts/PagesContext";
-import { handlePreviousPage, handleNextPage } from "../services/utils";
+import {
+  getCurrentPageNumber,
+  getPreviousPageNumber,
+  getNextPageNumber,
+} from "../services/utils";
 
 function Pages({ info }) {
   const {
@@ -9,56 +13,40 @@ function Pages({ info }) {
     setCharactersPageNumber,
     episodesPageNumber,
     setEpisodesPageNumber,
-    locationsPagesNumber,
-    setLocationsPagesNumber,
+    locationsPageNumber,
+    setLocationsPageNumber,
   } = usePageNumber();
 
   const [type, setType] = useState("");
+  const [pageNumber, setPageNumber] = useState();
 
+  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   useEffect(() => {
-    setType(pathname.replace("/", ""));
+    const pathInfo = pathname.split("/");
+    setType(pathInfo[1]);
+    setPageNumber(parseInt(pathInfo[2]));
   }, [pathname]);
 
   return (
     <div className="pages">
-      {info.previous && (
+      {info.prev && (
         <button
           type="button"
           onClick={() => {
-            type === "characters"
-              ? handlePreviousPage(
-                  charactersPageNumber,
-                  setCharactersPageNumber
-                )
-              : type === "episodes"
-              ? handlePreviousPage(episodesPageNumber, setEpisodesPageNumber)
-              : handlePreviousPage(
-                  locationsPagesNumber,
-                  setLocationsPagesNumber
-                );
+            navigate(`/${type}/${pageNumber - 1}`);
           }}
         >
           Previous
         </button>
       )}
-      <p>
-        {type === "characters"
-          ? charactersPageNumber
-          : type === "episodes"
-          ? episodesPageNumber
-          : locationsPagesNumber}
-      </p>
+      <p>{pageNumber}</p>
       {info.next && (
         <button
           type="button"
           onClick={() => {
-            type === "characters"
-              ? handleNextPage(charactersPageNumber, setCharactersPageNumber)
-              : type === "episodes"
-              ? handleNextPage(episodesPageNumber, setEpisodesPageNumber)
-              : handleNextPage(locationsPagesNumber, setLocationsPagesNumber);
+            navigate(`/${type}/${pageNumber + 1}`);
           }}
         >
           Next
